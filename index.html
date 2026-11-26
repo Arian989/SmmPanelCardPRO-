@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>AuraVoice • Real-Time P2P Group Voice Lounge</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- PeerJS WebRTC Cloud Signaling SDK -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -24,11 +22,11 @@
           },
           colors: {
             obsidian: {
-              950: '#07090E',
-              900: '#0C0F17',
-              850: '#111520',
-              800: '#171C2B',
-              700: '#22293D',
+              950: '#090A0F',
+              900: '#0E1017',
+              850: '#12151E',
+              800: '#181C28',
+              700: '#23293A',
             },
           },
           animation: {
@@ -53,213 +51,178 @@
   </script>
 
   <style>
-    /* Full Dynamic Viewport Height & Crisp Typography */
+    /* Dynamic Viewport Height for Mobile & Desktop Browsers */
     html, body {
       height: 100dvh;
-      background-color: #07090E;
+      background-color: #090A0F;
       color: #F3F4F6;
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
 
-    /* =====================================================================
-       REALISTIC 3D TACTILE HARDWARE BUTTONS (SPECULAR + BEVEL + PHYSICS)
-       ===================================================================== */
+    /* Realistic 3D Tactile Hardware Keycap Buttons */
     .tactile-btn {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, #252B3C 0%, #161A26 100%);
-      border: 1px solid rgba(255, 255, 255, 0.11);
+      background: linear-gradient(180deg, #242938 0%, #161A24 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow:
-        0 6px 0 #0B0E15,
-        0 10px 20px -4px rgba(0, 0, 0, 0.8),
-        inset 0 1px 1px rgba(255, 255, 255, 0.22),
-        inset 0 -2px 3px rgba(0, 0, 0, 0.55);
+        0 6px 14px -2px rgba(0, 0, 0, 0.72),
+        0 2px 4px -1px rgba(0, 0, 0, 0.55),
+        inset 0 1px 1px rgba(255, 255, 255, 0.18),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.5);
       transition:
-        transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.12s ease,
+        transform 0.13s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.13s ease,
         background 0.2s ease,
         border-color 0.2s ease;
     }
 
     /* Specular Sweep Highlight on Hover */
     .tactile-btn::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: -130%;
-      width: 55%;
+      width: 65%;
       height: 100%;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.22),
-        transparent
-      );
-      transform: skewX(-22deg);
-      transition: left 0.5s ease;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.55s ease;
       pointer-events: none;
     }
 
     .tactile-btn:hover:not(:disabled)::before {
-      left: 145%;
+      left: 150%;
     }
 
     .tactile-btn:hover:not(:disabled) {
-      background: linear-gradient(180deg, #2C3347 0%, #1B202E 100%);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: linear-gradient(180deg, #2B3143 0%, #1B202C 100%);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow:
+        0 8px 18px -2px rgba(0, 0, 0, 0.78),
+        0 3px 6px -1px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.24),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.55);
     }
 
-    /* Physical Keycap Depression */
     .tactile-btn:active:not(:disabled),
     .tactile-btn.pressed {
-      transform: translateY(4px) scale(0.985);
+      transform: translateY(2.5px) scale(0.975);
       box-shadow:
-        0 2px 0 #0B0E15,
-        0 4px 10px -2px rgba(0, 0, 0, 0.85),
+        0 2px 5px -1px rgba(0, 0, 0, 0.75),
         inset 0 2px 5px rgba(0, 0, 0, 0.7),
-        inset 0 0 1px rgba(255, 255, 255, 0.08);
+        inset 0 0 1px rgba(255, 255, 255, 0.06);
     }
 
     .tactile-btn:disabled {
-      opacity: 0.48;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Emerald Hardware Switch */
+    /* Tactile Color Variants */
     .tactile-emerald {
       background: linear-gradient(180deg, #10B981 0%, #059669 100%);
-      border-color: rgba(167, 243, 208, 0.48);
+      border-color: rgba(167, 243, 208, 0.42);
       box-shadow:
-        0 6px 0 #046C4E,
-        0 12px 24px -4px rgba(16, 185, 129, 0.45),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
+        0 6px 18px -2px rgba(16, 185, 129, 0.44),
+        0 2px 5px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.48),
         inset 0 -2px 4px rgba(4, 120, 87, 0.75);
     }
     .tactile-emerald:hover:not(:disabled) {
-      background: linear-gradient(180deg, #14CA8E 0%, #06A674 100%);
-    }
-    .tactile-emerald:active:not(:disabled) {
-      box-shadow:
-        0 2px 0 #046C4E,
-        0 5px 12px -2px rgba(16, 185, 129, 0.4),
-        inset 0 2px 5px rgba(0, 0, 0, 0.45);
+      background: linear-gradient(180deg, #14C98D 0%, #06A573 100%);
     }
 
-    /* Coral / Crimson Hardware Switch */
     .tactile-coral {
       background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-      border-color: rgba(254, 205, 211, 0.45);
+      border-color: rgba(254, 205, 211, 0.38);
       box-shadow:
-        0 6px 0 #881337,
-        0 12px 24px -4px rgba(244, 63, 94, 0.45),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.48),
+        0 6px 18px -2px rgba(244, 63, 94, 0.44),
+        0 2px 5px rgba(0, 0, 0, 0.65),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.42),
         inset 0 -2px 4px rgba(136, 19, 55, 0.78);
     }
     .tactile-coral:hover:not(:disabled) {
       background: linear-gradient(180deg, #FB506D 0%, #CE1745 100%);
     }
-    .tactile-coral:active:not(:disabled) {
-      box-shadow:
-        0 2px 0 #881337,
-        0 5px 12px -2px rgba(244, 63, 94, 0.4),
-        inset 0 2px 5px rgba(0, 0, 0, 0.5);
-    }
 
-    /* Indigo Hardware Switch */
-    .tactile-indigo {
-      background: linear-gradient(180deg, #6366F1 0%, #4338CA 100%);
-      border-color: rgba(199, 210, 254, 0.45);
-      box-shadow:
-        0 6px 0 #312E81,
-        0 12px 24px -4px rgba(99, 102, 241, 0.45),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.48),
-        inset 0 -2px 4px rgba(49, 46, 129, 0.78);
-    }
-    .tactile-indigo:hover:not(:disabled) {
-      background: linear-gradient(180deg, #7376F8 0%, #4E42D9 100%);
-    }
-    .tactile-indigo:active:not(:disabled) {
-      box-shadow:
-        0 2px 0 #312E81,
-        0 5px 12px -2px rgba(99, 102, 241, 0.4),
-        inset 0 2px 5px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Amber Hardware Switch */
     .tactile-amber {
       background: linear-gradient(180deg, #F59E0B 0%, #D97706 100%);
-      border-color: rgba(253, 230, 138, 0.48);
+      border-color: rgba(253, 230, 138, 0.42);
       box-shadow:
-        0 6px 0 #92400E,
-        0 12px 24px -4px rgba(245, 158, 11, 0.42),
-        inset 0 1px 1.5px rgba(255, 255, 255, 0.5),
+        0 6px 18px -2px rgba(245, 158, 11, 0.4),
+        0 2px 5px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
         inset 0 -2px 4px rgba(146, 64, 14, 0.75);
     }
-    .tactile-amber:active:not(:disabled) {
+
+    .tactile-indigo {
+      background: linear-gradient(180deg, #6366F1 0%, #4338CA 100%);
+      border-color: rgba(199, 210, 254, 0.38);
       box-shadow:
-        0 2px 0 #92400E,
-        0 5px 12px -2px rgba(245, 158, 11, 0.35),
-        inset 0 2px 5px rgba(0, 0, 0, 0.45);
+        0 6px 18px -2px rgba(99, 102, 241, 0.42),
+        0 2px 5px rgba(0, 0, 0, 0.6),
+        inset 0 1px 1.5px rgba(255, 255, 255, 0.42),
+        inset 0 -2px 4px rgba(49, 46, 129, 0.78);
     }
 
-    /* Glowing Hardware LED Dot */
+    /* LED Status Dot */
     .led-dot {
-      box-shadow: 0 0 9px currentColor;
+      box-shadow: 0 0 8px currentColor;
     }
 
-    /* Obsidian Glassmorphism Surface */
+    /* Glassmorphic Card Surface */
     .glass-surface {
-      background: rgba(17, 21, 32, 0.76);
+      background: rgba(18, 21, 30, 0.74);
       backdrop-filter: blur(22px);
       -webkit-backdrop-filter: blur(22px);
-      border: 1px solid rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.085);
       box-shadow:
-        0 18px 42px -8px rgba(0, 0, 0, 0.75),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 16px 38px -8px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09);
     }
 
-    /* =====================================================================
-       AUDIO-REACTIVE SPEAKER CARD & RIPPLE ANIMATIONS
-       ===================================================================== */
+    /* Active Speaker Card Aura */
     .speaker-card {
       transition:
-        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
         border-color 0.25s ease,
-        box-shadow 0.28s ease,
+        box-shadow 0.3s ease,
         background 0.25s ease;
     }
 
     .speaker-card.is-speaking {
-      border-color: rgba(16, 185, 129, 0.65);
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.13) 0%, rgba(17, 21, 32, 0.9) 100%);
+      border-color: rgba(16, 185, 129, 0.6);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.11) 0%, rgba(18, 21, 30, 0.88) 100%);
       box-shadow:
-        0 20px 44px -10px rgba(16, 185, 129, 0.32),
-        0 0 0 1px rgba(16, 185, 129, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
-      transform: translateY(-4px);
+        0 18px 42px -10px rgba(16, 185, 129, 0.28),
+        0 0 0 1px rgba(16, 185, 129, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      transform: translateY(-3px);
     }
 
+    /* Concentric Speaking Ripples */
     @keyframes ripplePulse {
       0% {
         transform: scale(0.95);
-        opacity: 0.85;
+        opacity: 0.8;
       }
       100% {
-        transform: scale(1.72);
+        transform: scale(1.68);
         opacity: 0;
       }
     }
 
     .voice-ripple {
-      animation: ripplePulse 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+      animation: ripplePulse 1.55s cubic-bezier(0.16, 1, 0.3, 1) infinite;
     }
     .voice-ripple-delay {
-      animation: ripplePulse 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s infinite;
+      animation: ripplePulse 1.55s cubic-bezier(0.16, 1, 0.3, 1) 0.52s infinite;
     }
 
-    /* Floating Emoji Reactions Physics */
+    /* Floating Emoji Physics */
     @keyframes floatReaction {
       0% {
         transform: translateY(0) translateX(0) scale(0.4) rotate(-8deg);
@@ -270,11 +233,11 @@
         opacity: 1;
       }
       50% {
-        transform: translateY(-195px) translateX(var(--sway-b, -16px)) scale(1.06) rotate(-5deg);
+        transform: translateY(-190px) translateX(var(--sway-b, -16px)) scale(1.06) rotate(-5deg);
         opacity: 0.95;
       }
       100% {
-        transform: translateY(-400px) translateX(var(--sway-c, 18px)) scale(0.85) rotate(10deg);
+        transform: translateY(-390px) translateX(var(--sway-c, 18px)) scale(0.85) rotate(10deg);
         opacity: 0;
       }
     }
@@ -283,7 +246,7 @@
       position: fixed;
       pointer-events: none;
       z-index: 60;
-      font-size: 2.25rem;
+      font-size: 2.2rem;
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55));
       animation: floatReaction 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
@@ -333,24 +296,24 @@
   <div id="reactionsLayer" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
 
   <!-- ===================================================================== -->
-  <!-- VIEW 1: STUDIO LOBBY & MICROPHONE PERMISSION SCREEN                   -->
+  <!-- VIEW 1: PREMIUM OBSIDIAN GLASSMORPHISM LOBBY & MIC DIAGNOSTICS        -->
   <!-- ===================================================================== -->
   <section id="lobbyScreen" class="relative z-20 flex-1 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
     <div class="glass-surface rounded-[32px] max-w-md w-full p-6 sm:p-8 border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.85)]">
       
       <!-- Brand Header -->
       <div class="flex flex-col items-center text-center mb-6">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-indigo-500/20 border border-emerald-400/35 flex items-center justify-center shadow-inner mb-3.5">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-indigo-500/20 border border-emerald-400/30 flex items-center justify-center shadow-inner mb-3.5">
           <svg class="w-7 h-7 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" />
           </svg>
         </div>
-        <h1 class="text-2xl font-extrabold text-white tracking-tight">AuraVoice</h1>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1">Real-Time Peer-to-Peer Group Voice Lounge</p>
+        <h1 class="text-2xl font-bold text-white tracking-tight">AuraVoice Studio</h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">Crystal-Clear P2P Noise-Gated Group Voice</p>
       </div>
 
-      <!-- Diagnostic / Permission Error Banner -->
-      <div id="lobbyErrorBanner" class="hidden mb-5 rounded-2xl p-3.5 bg-rose-500/15 border border-rose-500/40 text-rose-200 text-xs leading-relaxed">
+      <!-- Diagnostic / Permission Alert Banner -->
+      <div id="lobbyErrorBanner" class="hidden mb-5 rounded-2xl p-3.5 bg-rose-500/15 border border-rose-500/35 text-rose-200 text-xs leading-relaxed">
         <div class="flex items-start gap-2.5">
           <svg class="w-4 h-4 text-rose-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <circle cx="12" cy="12" r="10"></circle>
@@ -358,14 +321,36 @@
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
           <div>
-            <p id="lobbyErrorTitle" class="font-semibold text-rose-300 mb-0.5">Microphone Access Required</p>
-            <p id="lobbyErrorText" class="text-rose-200/90"></p>
+            <p id="lobbyErrorTitle" class="font-semibold text-rose-100 mb-0.5">Microphone Access Needed</p>
+            <p id="lobbyErrorText" class="text-rose-200/90">Please allow microphone permission in your browser when prompted.</p>
           </div>
         </div>
       </div>
 
+      <!-- User-Triggered Microphone Permission & Level Diagnostic Card -->
+      <div class="mb-5 rounded-2xl p-3.5 bg-obsidian-950/75 border border-white/10">
+        <div class="flex items-center justify-between gap-2 mb-2.5">
+          <div class="flex items-center gap-2">
+            <span id="micDiagLed" class="w-2 h-2 rounded-full bg-amber-400 led-dot"></span>
+            <span id="micDiagLabel" class="text-xs font-medium text-slate-300">Microphone Ready to Test</span>
+          </div>
+          <button
+            id="testMicBtn"
+            type="button"
+            onclick="testMicrophoneDiagnostic()"
+            class="tactile-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold text-emerald-300 cursor-pointer"
+          >
+            Test Mic
+          </button>
+        </div>
+        <!-- Live Mic Input Level Meter -->
+        <div class="h-2 w-full bg-obsidian-850 rounded-full overflow-hidden border border-white/5">
+          <div id="lobbyMicMeter" class="h-full w-0 bg-gradient-to-r from-emerald-500 to-teal-300 transition-all duration-75 rounded-full"></div>
+        </div>
+      </div>
+
       <!-- Display Name Input -->
-      <div class="mb-4">
+      <div class="mb-5">
         <label for="displayNameInput" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
           Your Display Name
         </label>
@@ -373,7 +358,7 @@
           id="displayNameInput"
           type="text"
           maxlength="22"
-          placeholder="Enter your name (e.g. Alex)"
+          placeholder="e.g. Alex, Nadia, Jordan..."
           class="w-full bg-obsidian-950/90 border border-white/10 rounded-2xl px-4 py-3.5 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/60 focus:ring-2 focus:ring-emerald-500/20 transition"
         />
       </div>
@@ -381,17 +366,18 @@
       <!-- Primary Action: Create New Room -->
       <button
         id="createRoomBtn"
+        type="button"
         onclick="startRoomFlow('host')"
-        class="tactile-btn tactile-emerald w-full py-3.5 px-5 rounded-2xl text-sm sm:text-base font-bold text-white flex items-center justify-center gap-2.5 cursor-pointer"
+        class="tactile-btn tactile-emerald w-full py-3.5 px-5 rounded-2xl text-sm sm:text-base font-semibold text-white flex items-center justify-center gap-2.5 cursor-pointer"
       >
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <path d="M12 5v14M5 12h14" stroke-linecap="round" />
         </svg>
-        <span id="createBtnText">Create Voice Room</span>
+        <span id="createBtnText">Create New Voice Room</span>
       </button>
 
       <!-- Divider -->
-      <div class="relative my-6 flex items-center justify-center">
+      <div class="relative my-5 flex items-center justify-center">
         <div class="w-full border-t border-white/10"></div>
         <span class="px-3 bg-obsidian-850 text-[11px] font-semibold uppercase tracking-widest text-slate-500 rounded-full">
           Or Join With Code
@@ -399,7 +385,7 @@
       </div>
 
       <!-- Join Existing Room by Code -->
-      <div class="flex items-stretch gap-2.5 mb-5">
+      <div class="flex items-stretch gap-2.5">
         <input
           id="roomCodeInput"
           type="text"
@@ -410,44 +396,24 @@
         />
         <button
           id="joinRoomBtn"
+          type="button"
           onclick="startRoomFlow('guest')"
-          class="tactile-btn tactile-indigo flex-1 py-3.5 px-4 rounded-2xl text-sm sm:text-base font-bold text-white flex items-center justify-center gap-2 cursor-pointer"
+          class="tactile-btn tactile-indigo flex-1 py-3.5 px-4 rounded-2xl text-sm sm:text-base font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
         >
           <span id="joinBtnText">Join Room</span>
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
       </div>
 
-      <!-- User-Triggered Microphone Diagnostic & Live Level Meter -->
-      <div class="bg-obsidian-950/75 border border-white/10 rounded-2xl p-3.5">
-        <div class="flex items-center justify-between gap-2 mb-2.5">
-          <div class="flex items-center gap-2">
-            <span id="micDiagLed" class="w-2 h-2 rounded-full bg-slate-500"></span>
-            <span id="micDiagLabel" class="text-xs font-medium text-slate-300">Microphone Not Tested</span>
-          </div>
-          <button
-            id="testMicBtn"
-            onclick="testMicrophoneDiagnostic()"
-            class="tactile-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-300 hover:text-white cursor-pointer"
-          >
-            Test Mic
-          </button>
-        </div>
-        <!-- Live Voice Level Meter Bar -->
-        <div class="h-2 w-full bg-obsidian-900 rounded-full overflow-hidden border border-white/5">
-          <div id="lobbyMicMeter" class="h-full w-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-300 transition-all duration-75"></div>
-        </div>
-      </div>
-
-      <!-- Footer Info -->
-      <div class="mt-5 pt-3.5 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-500">
-        <span class="inline-flex items-center gap-1.5">
+      <!-- Security & WebRTC Status Footer -->
+      <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-500">
+        <span id="secureContextBadge" class="inline-flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400 led-dot"></span>
-          WebRTC Mesh Audio
+          HTTPS Secure Ready
         </span>
-        <span id="protocolBadge" class="font-mono">HTTPS Ready</span>
+        <span>RMS Noise Gate Active</span>
       </div>
     </div>
   </section>
@@ -471,12 +437,12 @@
 
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <button onclick="copyRoomCode()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition cursor-pointer" title="Click to copy Room Code">
+              <button type="button" onclick="copyRoomCode()" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition cursor-pointer" title="Click to copy Room Code">
                 <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Room</span>
                 <span id="headerRoomCode" class="font-mono text-xs sm:text-sm font-bold text-emerald-400 tracking-wider">-----</span>
               </button>
               <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                P2P Encrypted
+                Clean Voice Gate
               </span>
             </div>
             <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
@@ -485,28 +451,15 @@
                 <span id="callTimer">00:00</span>
               </span>
               <span>•</span>
-              <span id="participantCountLabel">1 in room</span>
+              <span id="participantCountLabel">1 person in room</span>
             </div>
           </div>
         </div>
 
-        <!-- Right: SFX Toggle, Copy Invite Link & Chat Drawer Toggle -->
+        <!-- Right: One-Tap Share Link & Chat Drawer Toggle -->
         <div class="flex items-center gap-2">
-          <!-- Tactile UI Click Sounds Toggle -->
-          <button id="uiSfxBtn" onclick="toggleUiSfx()" class="tactile-btn p-2.5 rounded-xl text-slate-300 hover:text-white cursor-pointer" title="Toggle Tactile Button Sounds">
-            <svg id="uiSfxIconOn" class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            <svg id="uiSfxIconOff" class="w-4 h-4 text-slate-500 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <line x1="23" y1="9" x2="17" y2="15"></line>
-              <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
-          </button>
-
           <!-- One-Tap Copy Shareable Invite Link -->
-          <button onclick="copyInviteLink()" class="tactile-btn tactile-indigo px-3 py-2 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5 cursor-pointer" title="Copy Shareable Link for Friends">
+          <button type="button" onclick="copyInviteLink()" class="tactile-btn tactile-indigo px-3 py-2 rounded-xl text-xs font-semibold text-white flex items-center gap-1.5 cursor-pointer" title="Copy Shareable Invite Link">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
               <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
@@ -515,7 +468,7 @@
           </button>
 
           <!-- Chat Drawer Toggle -->
-          <button id="drawerToggleBtn" onclick="toggleSideDrawer()" class="tactile-btn px-3 py-2 rounded-xl text-xs font-medium text-slate-200 flex items-center gap-1.5 cursor-pointer relative">
+          <button id="drawerToggleBtn" type="button" onclick="toggleSideDrawer()" class="tactile-btn px-3 py-2 rounded-xl text-xs font-medium text-slate-200 flex items-center gap-1.5 cursor-pointer relative">
             <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
@@ -541,20 +494,20 @@
           </div>
         </div>
 
-        <!-- Alone in Room Invite Helper Banner -->
+        <!-- Waiting for Friends Banner (Shown when alone in room) -->
         <div id="aloneBanner" class="mb-4 glass-surface rounded-2xl p-4 border-indigo-500/25 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <div>
             <p class="text-xs sm:text-sm font-semibold text-white">Waiting for friends to join your voice room</p>
-            <p class="text-xs text-slate-400 mt-0.5">Share the invite link or open this URL in another browser tab/device to talk live.</p>
+            <p class="text-xs text-slate-400 mt-0.5">Share the room link or open this URL in another browser tab or device to talk live.</p>
           </div>
-          <button onclick="copyInviteLink()" class="tactile-btn tactile-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 cursor-pointer">
+          <button type="button" onclick="copyInviteLink()" class="tactile-btn tactile-emerald px-4 py-2 rounded-xl text-xs font-semibold text-white shrink-0 cursor-pointer">
             Copy Invite Link
           </button>
         </div>
 
         <!-- Participant Speaker Cards Grid -->
         <div id="participantsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          <!-- Rendered dynamically -->
+          <!-- Dynamically populated -->
         </div>
       </section>
 
@@ -565,7 +518,7 @@
             <span class="w-2 h-2 rounded-full bg-emerald-400 led-dot"></span>
             <h2 class="text-sm font-semibold text-white">Live Room Chat</h2>
           </div>
-          <button onclick="toggleSideDrawer()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 cursor-pointer">
+          <button type="button" onclick="toggleSideDrawer()" class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 cursor-pointer">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -576,7 +529,7 @@
         <!-- Messages List -->
         <div id="chatMessages" class="flex-1 overflow-y-auto p-3.5 space-y-2.5 text-xs sm:text-sm">
           <div class="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-3 text-slate-400 text-xs">
-            Peer-to-peer data channel active. Messages sent here appear instantaneously for everyone in the room.
+            Peer-to-peer data channel ready. Messages sent here appear immediately for everyone in the room.
           </div>
         </div>
 
@@ -599,24 +552,24 @@
       </aside>
     </main>
 
-    <!-- BOTTOM REALISTIC 3D TACTILE HARDWARE CONTROL DOCK -->
-    <footer class="relative z-30 px-3 sm:px-4 pb-5 pt-2 shrink-0">
+    <!-- BOTTOM REALISTIC TACTILE HARDWARE CONTROL DOCK -->
+    <footer class="relative z-30 px-3 sm:px-4 pb-4 pt-2 shrink-0">
       <div class="max-w-xl mx-auto flex flex-col items-center">
         
         <!-- Pop-up Live Reactions Bar -->
         <div id="reactionsDrawer" class="hidden mb-3 glass-surface rounded-2xl p-2 flex items-center gap-2 shadow-2xl transform transition-all duration-200 scale-95 opacity-0">
-          <button onclick="sendLiveReaction('🔥')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">🔥</button>
-          <button onclick="sendLiveReaction('👏')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">👏</button>
-          <button onclick="sendLiveReaction('❤️')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">❤️</button>
-          <button onclick="sendLiveReaction('😂')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">😂</button>
-          <button onclick="sendLiveReaction('👍')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">👍</button>
+          <button type="button" onclick="sendLiveReaction('🔥')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">🔥</button>
+          <button type="button" onclick="sendLiveReaction('👏')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">👏</button>
+          <button type="button" onclick="sendLiveReaction('❤️')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">❤️</button>
+          <button type="button" onclick="sendLiveReaction('😂')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">😂</button>
+          <button type="button" onclick="sendLiveReaction('👍')" class="tactile-btn w-11 h-11 rounded-xl text-xl flex items-center justify-center hover:scale-110 cursor-pointer">👍</button>
         </div>
 
-        <!-- Hardware Control Dock Chassis -->
-        <div class="glass-surface rounded-[28px] p-2.5 sm:p-3 flex items-center justify-center gap-2.5 sm:gap-3.5 shadow-[0_24px_55px_rgba(0,0,0,0.9)] border border-white/10">
+        <!-- Hardware Dock Housing -->
+        <div class="glass-surface rounded-[28px] p-2.5 sm:p-3 flex items-center justify-center gap-2.5 sm:gap-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.85)] border border-white/10">
           
-          <!-- 1. Microphone Mute / Unmute Hardware Switch -->
-          <button id="micBtn" onclick="toggleMic()" class="tactile-btn tactile-emerald group relative w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-white cursor-pointer" title="Mute / Unmute Microphone">
+          <!-- 1. Microphone Mute / Unmute Button -->
+          <button id="micBtn" type="button" onclick="toggleMic()" class="tactile-btn tactile-emerald group relative w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-white cursor-pointer" title="Mute / Unmute Microphone">
             <div class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-white led-dot" id="micLed"></div>
             <svg id="micIconOn" class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -631,11 +584,11 @@
               <line x1="12" y1="19" x2="12" y2="23"></line>
               <line x1="8" y1="23" x2="16" y2="23"></line>
             </svg>
-            <span id="micLabel" class="text-[9px] font-bold tracking-wider uppercase mt-0.5 opacity-95">Live</span>
+            <span id="micLabel" class="text-[9px] font-semibold tracking-wider uppercase mt-0.5 opacity-95">Live</span>
           </button>
 
-          <!-- 2. Speaker / Deafen Hardware Switch -->
-          <button id="deafenBtn" onclick="toggleDeafen()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Deafen / Mute Incoming Room Audio">
+          <!-- 2. Speaker / Deafen Button -->
+          <button id="deafenBtn" type="button" onclick="toggleDeafen()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Deafen / Mute All Incoming Audio">
             <div class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 led-dot" id="deafenLed"></div>
             <svg id="speakerIconOn" class="w-5 h-5 sm:w-6 sm:h-6 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
@@ -647,36 +600,36 @@
               <path d="M21 12v6"></path>
               <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
             </svg>
-            <span id="deafenLabel" class="text-[9px] font-bold tracking-wider uppercase mt-0.5 text-slate-400">Audio</span>
+            <span id="deafenLabel" class="text-[9px] font-semibold tracking-wider uppercase mt-0.5 text-slate-400">Audio</span>
           </button>
 
-          <!-- 3. Raise Hand Hardware Switch -->
-          <button id="handBtn" onclick="toggleRaiseHand()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Raise Hand">
+          <!-- 3. Raise Hand Button -->
+          <button id="handBtn" type="button" onclick="toggleRaiseHand()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Raise Hand">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
               <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
               <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
               <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
             </svg>
-            <span class="text-[9px] font-bold tracking-wider uppercase mt-0.5 text-slate-400">Hand</span>
+            <span class="text-[9px] font-semibold tracking-wider uppercase mt-0.5 text-slate-400">Hand</span>
           </button>
 
-          <!-- 4. Floating Reactions Hardware Switch -->
-          <button id="reactToggleBtn" onclick="toggleReactionsDrawer()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Live Reactions">
+          <!-- 4. Floating Reactions Toggle -->
+          <button id="reactToggleBtn" type="button" onclick="toggleReactionsDrawer()" class="tactile-btn w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center text-slate-200 cursor-pointer" title="Live Reactions">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
               <line x1="9" y1="9" x2="9.01" y2="9"></line>
               <line x1="15" y1="9" x2="15.01" y2="9"></line>
             </svg>
-            <span class="text-[9px] font-bold tracking-wider uppercase mt-0.5 text-slate-400">React</span>
+            <span class="text-[9px] font-semibold tracking-wider uppercase mt-0.5 text-slate-400">React</span>
           </button>
 
-          <!-- Hardware Divider -->
+          <!-- Divider -->
           <div class="w-px h-9 bg-white/10 mx-0.5"></div>
 
-          <!-- 5. Leave Call Hardware Button -->
-          <button onclick="leaveCall()" class="tactile-btn tactile-coral px-4 sm:px-5 h-13 sm:h-14 rounded-2xl flex items-center justify-center gap-2 text-white font-bold text-xs sm:text-sm cursor-pointer" title="Leave Voice Room">
+          <!-- 5. Leave Call Button -->
+          <button type="button" onclick="leaveCall()" class="tactile-btn tactile-coral px-4 sm:px-5 h-13 sm:h-14 rounded-2xl flex items-center justify-center gap-2 text-white font-semibold text-xs sm:text-sm cursor-pointer" title="Leave Voice Room">
             <svg class="w-5 h-5 rotate-[135deg]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
             </svg>
@@ -688,7 +641,7 @@
   </div>
 
   <!-- ===================================================================== -->
-  <!-- JAVASCRIPT: WEBRTC MESH + PEERJS SIGNALING + WEB AUDIO SYNTH & VAD    -->
+  <!-- WEBRTC MESH ENGINE, PEERJS SIGNALING & NOISE-GATED VOICE PIPELINE     -->
   <!-- ===================================================================== -->
   <script>
     /**
@@ -702,7 +655,6 @@
       isMuted: false,
       isDeafened: false,
       handRaised: false,
-      uiSfxEnabled: true,
       reactionsOpen: false,
       drawerOpen: false,
       callSeconds: 0,
@@ -725,7 +677,9 @@
     const audioAnalysers = new Map();
 
     let peerInstance = null;
+    let rawMicStream = null;
     let localStream = null;
+    let noiseGateRafId = null;
     let testStream = null;
     let testAnimId = null;
     let audioCtx = null;
@@ -734,31 +688,23 @@
      * 2. INITIALIZATION & ENVIRONMENT DIAGNOSTICS
      */
     window.addEventListener('DOMContentLoaded', () => {
-      // Check secure context (HTTPS or localhost)
-      const isSecure = window.isSecureContext || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const protocolBadge = document.getElementById('protocolBadge');
-      if (!isSecure) {
-        protocolBadge.textContent = 'Non-HTTPS (Mic Blocked)';
-        protocolBadge.classList.add('text-rose-400');
+      const badge = document.getElementById('secureContextBadge');
+      if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 led-dot"></span><span class="text-rose-400">HTTPS Required for Mic</span>`;
         showLobbyError(
           'Insecure Connection Detected',
-          'Browser security blocks microphone access on file:// or HTTP pages. Deploy this index.html on GitHub Pages (HTTPS) to enable live voice calls.'
+          'Browser security blocks microphone access on HTTP or local file:// links. Open this site over HTTPS (such as GitHub Pages) in Google Chrome or Safari.'
         );
-      } else {
-        protocolBadge.textContent = 'HTTPS Secure';
-        protocolBadge.classList.add('text-emerald-400');
       }
 
-      // Auto-populate ?room=CODE query parameter
       const params = new URLSearchParams(window.location.search);
       const roomParam = params.get('room');
       if (roomParam) {
         const cleanCode = roomParam.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
         document.getElementById('roomCodeInput').value = cleanCode;
-        showToast(`Invite code ${cleanCode} loaded!`);
+        showToast(`Room code ${cleanCode} loaded from invite link!`);
       }
 
-      // Restore saved display name
       const savedName = localStorage.getItem('auravoice_name');
       if (savedName) {
         document.getElementById('displayNameInput').value = savedName;
@@ -808,51 +754,131 @@
     }
 
     /**
-     * 3. WEB AUDIO API: TACTILE MECHANICAL CLICKS & VOICE ANALYSERS
+     * 3. ULTRA-CLEAN OUTBOUND VOICE PIPELINE (NO UI SOUND EFFECTS)
+     * Chain: Mic -> 130Hz High-Pass -> 7.5kHz Low-Pass -> 2.4kHz Speech Presence EQ
+     *        -> Smooth RMS Noise Gate (silences background noise when not speaking)
+     *        -> Dynamics Compressor -> WebRTC MediaStreamDestination
      */
     function ensureAudioContext() {
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContextClass();
+        audioCtx = new AudioContextClass({ sampleRate: 48000 });
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
     }
 
-    function playTactileClick(pitch = 520, type = 'pop') {
-      if (!state.uiSfxEnabled) return;
-      try {
-        ensureAudioContext();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+    function stopNoiseGateLoop() {
+      if (noiseGateRafId) {
+        cancelAnimationFrame(noiseGateRafId);
+        noiseGateRafId = null;
+      }
+    }
 
-        if (type === 'pop') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(pitch, now);
-          osc.frequency.exponentialRampToValueAtTime(pitch * 0.45, now + 0.045);
-          gain.gain.setValueAtTime(0.14, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
-        } else if (type === 'toggleOn') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(420, now);
-          osc.frequency.exponentialRampToValueAtTime(760, now + 0.065);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
-        } else if (type === 'toggleOff') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(640, now);
-          osc.frequency.exponentialRampToValueAtTime(320, now + 0.065);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+    function createProcessedVoiceStream(micStream) {
+      ensureAudioContext();
+      stopNoiseGateLoop();
+
+      const source = audioCtx.createMediaStreamSource(micStream);
+
+      // 1. 130Hz High-Pass Filter: strips fan rumble, wind, and handling thumps
+      const highPass = audioCtx.createBiquadFilter();
+      highPass.type = 'highpass';
+      highPass.frequency.setValueAtTime(130, audioCtx.currentTime);
+      highPass.Q.setValueAtTime(0.707, audioCtx.currentTime);
+
+      // 2. 7.5kHz Low-Pass Filter: removes high-frequency mic hiss and electronic static
+      const lowPass = audioCtx.createBiquadFilter();
+      lowPass.type = 'lowpass';
+      lowPass.frequency.setValueAtTime(7500, audioCtx.currentTime);
+      lowPass.Q.setValueAtTime(0.707, audioCtx.currentTime);
+
+      // 3. 2.4kHz Speech Presence EQ Boost: enhances vocal clarity and intelligibility
+      const presenceBoost = audioCtx.createBiquadFilter();
+      presenceBoost.type = 'peaking';
+      presenceBoost.frequency.setValueAtTime(2400, audioCtx.currentTime);
+      presenceBoost.Q.setValueAtTime(1.1, audioCtx.currentTime);
+      presenceBoost.gain.setValueAtTime(3.0, audioCtx.currentTime);
+
+      // 4. Analyser for real-time time-domain RMS level detection
+      const rmsAnalyser = audioCtx.createAnalyser();
+      rmsAnalyser.fftSize = 512;
+      const timeDomainData = new Float32Array(rmsAnalyser.fftSize);
+
+      // 5. Smooth GainNode acting as a fast-attack, smooth-release RMS Noise Gate
+      const gateGain = audioCtx.createGain();
+      gateGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+
+      // 6. Dynamics Compressor: prevents loud speech clipping and levels soft words
+      const compressor = audioCtx.createDynamicsCompressor();
+      compressor.threshold.setValueAtTime(-22, audioCtx.currentTime);
+      compressor.knee.setValueAtTime(16, audioCtx.currentTime);
+      compressor.ratio.setValueAtTime(3.2, audioCtx.currentTime);
+      compressor.attack.setValueAtTime(0.004, audioCtx.currentTime);
+      compressor.release.setValueAtTime(0.16, audioCtx.currentTime);
+
+      const destination = audioCtx.createMediaStreamDestination();
+
+      // Connect signal chain
+      source.connect(highPass);
+      highPass.connect(lowPass);
+      lowPass.connect(presenceBoost);
+      presenceBoost.connect(rmsAnalyser);
+      rmsAnalyser.connect(gateGain);
+      gateGain.connect(compressor);
+      compressor.connect(destination);
+
+      // RMS Noise Gate parameters (hysteresis + hold prevents choppy word tails)
+      const OPEN_THRESHOLD = 0.016;   // Opens promptly when voice starts
+      const CLOSE_THRESHOLD = 0.010;  // Closes cleanly when speech stops
+      const HOLD_MS = 220;            // Keeps gate open briefly between syllables
+      let gateOpen = false;
+      let lastVoiceTime = 0;
+
+      function processNoiseGate() {
+        if (!localStream) return;
+
+        if (state.isMuted) {
+          gateOpen = false;
+          gateGain.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.015);
+          noiseGateRafId = requestAnimationFrame(processNoiseGate);
+          return;
         }
 
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.07);
-      } catch (e) {}
+        rmsAnalyser.getFloatTimeDomainData(timeDomainData);
+        let sumSquares = 0;
+        for (let i = 0; i < timeDomainData.length; i++) {
+          const sample = timeDomainData[i];
+          sumSquares += sample * sample;
+        }
+        const rms = Math.sqrt(sumSquares / timeDomainData.length);
+        const nowMs = performance.now();
+
+        if (rms >= OPEN_THRESHOLD) {
+          gateOpen = true;
+          lastVoiceTime = nowMs;
+        } else if (gateOpen && rms < CLOSE_THRESHOLD && nowMs - lastVoiceTime > HOLD_MS) {
+          gateOpen = false;
+        }
+
+        // Fast 12ms attack when speaking, smooth 55ms release into complete silence
+        if (gateOpen) {
+          gateGain.gain.setTargetAtTime(1.0, audioCtx.currentTime, 0.012);
+        } else {
+          gateGain.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.055);
+        }
+
+        noiseGateRafId = requestAnimationFrame(processNoiseGate);
+      }
+
+      noiseGateRafId = requestAnimationFrame(processNoiseGate);
+
+      destination.stream.getAudioTracks().forEach((track) => {
+        track.enabled = !state.isMuted;
+      });
+
+      return destination.stream;
     }
 
     function attachStreamAnalyser(peerId, stream) {
@@ -897,6 +923,8 @@
             echoCancellation: true,
             noiseSuppression: true,
             autoGainControl: true,
+            channelCount: 1,
+            sampleRate: 48000,
           },
           video: false,
         });
@@ -904,29 +932,28 @@
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
           throw {
             title: 'Microphone Permission Blocked',
-            message: 'Tap the Lock/Tune icon in your browser address bar -> Permissions -> set Microphone to Allow, then reload this page.',
+            message: 'Click the lock/settings icon next to the browser address bar, set Microphone to "Allow", and reload the page.',
           };
         } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
           throw {
             title: 'No Microphone Found',
-            message: 'No audio input device was detected on your device. Connect a microphone or headset and try again.',
+            message: 'No audio input device was detected. Connect a headset or microphone and try again.',
           };
         } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
           throw {
-            title: 'Microphone Busy',
-            message: 'Another app or phone call is currently using your microphone. Close other audio apps and retry.',
+            title: 'Microphone In Use',
+            message: 'Another app or call is currently using your microphone. Close it and try again.',
           };
         } else {
           throw {
             title: 'Microphone Error',
-            message: err.message || 'Could not access microphone. Please check browser permissions.',
+            message: err.message || 'Unable to access microphone.',
           };
         }
       }
     }
 
     async function testMicrophoneDiagnostic() {
-      playTactileClick(560, 'pop');
       const btn = document.getElementById('testMicBtn');
       const led = document.getElementById('micDiagLed');
       const label = document.getElementById('micDiagLabel');
@@ -948,31 +975,31 @@
         const analyser = audioCtx.createAnalyser();
         analyser.fftSize = 256;
         source.connect(analyser);
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const data = new Uint8Array(analyser.frequencyBinCount);
 
         state.isTestingMic = true;
         btn.textContent = 'Stop Test';
         led.className = 'w-2 h-2 rounded-full bg-emerald-400 led-dot animate-pulse';
-        label.textContent = 'Mic Active — Speak to test level';
+        label.textContent = 'Mic Allowed! Speak to test level...';
         label.className = 'text-xs font-semibold text-emerald-300';
 
         function updateMeter() {
           if (!state.isTestingMic) return;
-          analyser.getByteFrequencyData(dataArray);
+          analyser.getByteFrequencyData(data);
           let sum = 0;
-          for (let i = 0; i < 32; i++) sum += dataArray[i];
+          for (let i = 0; i < 32; i++) sum += data[i];
           const avg = sum / 32;
-          const pct = Math.min(100, Math.max(4, Math.round(((avg - 10) / 85) * 100)));
+          const pct = Math.min(100, Math.round((avg / 110) * 100));
           meter.style.width = `${pct}%`;
           testAnimId = requestAnimationFrame(updateMeter);
         }
         updateMeter();
-      } catch (diagErr) {
+      } catch (err) {
         btn.textContent = 'Test Mic';
         led.className = 'w-2 h-2 rounded-full bg-rose-500 led-dot';
-        label.textContent = diagErr.title;
-        label.className = 'text-xs font-semibold text-rose-300';
-        showLobbyError(diagErr.title, diagErr.message);
+        label.textContent = err.title;
+        label.className = 'text-xs font-semibold text-rose-400';
+        showLobbyError(err.title, err.message);
       }
     }
 
@@ -984,18 +1011,17 @@
         testStream = null;
       }
       document.getElementById('testMicBtn').textContent = 'Test Mic';
-      document.getElementById('micDiagLed').className = 'w-2 h-2 rounded-full bg-slate-500';
-      document.getElementById('micDiagLabel').textContent = 'Microphone Ready';
-      document.getElementById('micDiagLabel').className = 'text-xs font-medium text-slate-300';
+      document.getElementById('micDiagLed').className = 'w-2 h-2 rounded-full bg-emerald-400 led-dot';
+      document.getElementById('micDiagLabel').textContent = 'Microphone Verified & Ready';
+      document.getElementById('micDiagLabel').className = 'text-xs font-medium text-emerald-300';
       document.getElementById('lobbyMicMeter').style.width = '0%';
     }
 
     /**
-     * 5. CREATE OR JOIN ROOM FLOW (PEERJS MESH + WEBRTC AUDIO)
+     * 5. START HOST OR JOIN ROOM FLOW (MICROPHONE + PEERJS MESH)
      */
     async function startRoomFlow(mode) {
       hideLobbyError();
-      playTactileClick(600, 'toggleOn');
 
       if (state.isTestingMic) {
         stopMicDiagnostic();
@@ -1024,23 +1050,24 @@
       const joinBtn = document.getElementById('joinRoomBtn');
       createBtn.disabled = true;
       joinBtn.disabled = true;
-      document.getElementById('createBtnText').textContent = mode === 'host' ? 'Requesting Mic...' : 'Create Voice Room';
+      document.getElementById('createBtnText').textContent = mode === 'host' ? 'Requesting Mic...' : 'Create New Voice Room';
       document.getElementById('joinBtnText').textContent = mode === 'guest' ? 'Requesting Mic...' : 'Join Room';
 
-      // Step A: User-Triggered Microphone Acquisition
+      // Step A: User-Triggered Microphone Acquisition & Clean Noise-Gated Pipeline
       try {
-        localStream = await acquireMicrophoneStream();
+        rawMicStream = await acquireMicrophoneStream();
+        localStream = createProcessedVoiceStream(rawMicStream);
       } catch (micErr) {
         createBtn.disabled = false;
         joinBtn.disabled = false;
-        document.getElementById('createBtnText').textContent = 'Create Voice Room';
+        document.getElementById('createBtnText').textContent = 'Create New Voice Room';
         document.getElementById('joinBtnText').textContent = 'Join Room';
         showLobbyError(micErr.title, micErr.message);
         return;
       }
 
-      document.getElementById('createBtnText').textContent = mode === 'host' ? 'Creating Room...' : 'Create Voice Room';
-      document.getElementById('joinBtnText').textContent = mode === 'guest' ? 'Connecting...' : 'Join Room';
+      document.getElementById('createBtnText').textContent = mode === 'host' ? 'Connecting...' : 'Create New Voice Room';
+      document.getElementById('joinBtnText').textContent = mode === 'guest' ? 'Joining...' : 'Join Room';
 
       state.myName = nameInput;
       state.roomCode = code;
@@ -1052,7 +1079,7 @@
         ? `auravoice-room-${code}-host`
         : `auravoice-room-${code}-${randomSuffix}`;
 
-      // Step B: Connect to PeerJS Cloud Signaling Server
+      // Step B: Connect to PeerJS Signaling Server with Google Public STUN Servers
       peerInstance = new Peer(deterministicId, {
         debug: 1,
         config: {
@@ -1086,7 +1113,6 @@
 
         attachStreamAnalyser(id, localStream);
 
-        // Update browser URL cleanly with ?room=CODE
         const newUrl = `${window.location.pathname}?room=${code}`;
         window.history.replaceState({ room: code }, '', newUrl);
 
@@ -1111,16 +1137,18 @@
         console.error('PeerJS error:', err);
         createBtn.disabled = false;
         joinBtn.disabled = false;
-        document.getElementById('createBtnText').textContent = 'Create Voice Room';
+        document.getElementById('createBtnText').textContent = 'Create New Voice Room';
         document.getElementById('joinBtnText').textContent = 'Join Room';
 
         if (err.type === 'peer-unavailable') {
           showToast(`Room "${code}" not found or Host is offline.`);
           if (!state.inCall) {
-            showLobbyError('Room Not Found', `Room "${code}" could not be reached. Verify the code or create a new room.`);
+            cleanupStreams();
+            showLobbyError('Room Not Found', `No active host found for room code "${code}". Verify the code or create a new room.`);
           }
         } else if (err.type === 'unavailable-id') {
-          showLobbyError('Room Already Active', `Room code "${code}" is currently in use. Create a new room to get a fresh code.`);
+          cleanupStreams();
+          showLobbyError('Room Code In Use', `Room code "${code}" is already active. Please click Create New Voice Room again.`);
         } else {
           showToast(`Network notice: ${err.type}`);
         }
@@ -1137,7 +1165,7 @@
     }
 
     /**
-     * 6. FULL MESH PEER CONNECTION HANDLERS
+     * 6. FULL MESH PEER CONNECTION HANDLERS (DATA + AUDIO)
      */
     function connectToPeer(targetPeerId, initiateMediaCall = true) {
       if (!targetPeerId || targetPeerId === state.myPeerId) return;
@@ -1170,7 +1198,6 @@
           handRaised: state.handRaised,
         });
 
-        // Host shares full mesh participant list with newcomers
         if (state.isHost) {
           const peerList = Array.from(participants.values()).map((p) => ({
             peerId: p.id,
@@ -1190,8 +1217,13 @@
         handleIncomingDataMessage(remoteId, data);
       });
 
-      conn.on('close', () => removeRemotePeer(remoteId));
-      conn.on('error', () => removeRemotePeer(remoteId));
+      conn.on('close', () => {
+        removeRemotePeer(remoteId);
+      });
+
+      conn.on('error', () => {
+        removeRemotePeer(remoteId);
+      });
     }
 
     function setupMediaConnection(call) {
@@ -1228,13 +1260,18 @@
         }
         audioEl.srcObject = remoteStream;
         audioEl.muted = state.isDeafened;
-        audioEl.play().catch((e) => console.warn('Autoplay deferred:', e));
+        audioEl.play().catch((e) => console.warn('Audio playback deferred:', e));
 
         attachStreamAnalyser(remoteId, remoteStream);
       });
 
-      call.on('close', () => removeRemotePeer(remoteId));
-      call.on('error', () => removeRemotePeer(remoteId));
+      call.on('close', () => {
+        removeRemotePeer(remoteId);
+      });
+
+      call.on('error', () => {
+        removeRemotePeer(remoteId);
+      });
     }
 
     function handleIncomingDataMessage(senderId, data) {
@@ -1260,7 +1297,6 @@
         renderParticipants();
         if (isNew) {
           showToast(`${data.name} joined the voice room`);
-          playTactileClick(640, 'toggleOn');
         }
       } else if (data.type === 'peer-list' && Array.isArray(data.peers)) {
         data.peers.forEach((p) => {
@@ -1318,7 +1354,6 @@
       const leaving = participants.get(peerId);
       if (leaving) {
         showToast(`${leaving.name} left the room`);
-        playTactileClick(360, 'toggleOff');
       }
       participants.delete(peerId);
       dataConnections.delete(peerId);
@@ -1380,9 +1415,9 @@
                 isSpeaking ? 'voice-ripple-delay' : 'hidden'
               }"></div>
 
-              <div id="ring-${p.id}" style="transform: scale(${isSpeaking ? 1 + p.energy * 0.16 : 1})" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 transition-transform duration-75 ${
+              <div id="ring-${p.id}" style="transform: scale(${isSpeaking ? 1 + p.energy * 0.15 : 1})" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 transition-transform duration-75 ${
                 isSpeaking
-                  ? 'bg-gradient-to-tr from-emerald-400 via-teal-300 to-indigo-400 shadow-[0_0_26px_rgba(16,185,129,0.6)]'
+                  ? 'bg-gradient-to-tr from-emerald-400 via-teal-300 to-indigo-400 shadow-[0_0_24px_rgba(16,185,129,0.55)]'
                   : 'bg-white/10'
               }">
                 <div class="w-full h-full rounded-full bg-gradient-to-br ${p.gradient} flex items-center justify-center text-white font-bold text-lg sm:text-xl tracking-tight shadow-inner relative">
@@ -1429,6 +1464,7 @@
       updateRaisedHandsBanner();
     }
 
+    // 60fps Real-Time Voice Activity Detection Loop
     function vadAnimationLoop() {
       if (state.inCall) {
         participants.forEach((p, peerId) => {
@@ -1465,8 +1501,8 @@
             ripple2.classList.remove('hidden');
             ripple2.classList.add('voice-ripple-delay');
             ring.className =
-              'w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 transition-transform duration-75 bg-gradient-to-tr from-emerald-400 via-teal-300 to-indigo-400 shadow-[0_0_26px_rgba(16,185,129,0.6)]';
-            ring.style.transform = `scale(${1 + p.energy * 0.16})`;
+              'w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 transition-transform duration-75 bg-gradient-to-tr from-emerald-400 via-teal-300 to-indigo-400 shadow-[0_0_24px_rgba(16,185,129,0.55)]';
+            ring.style.transform = `scale(${1 + p.energy * 0.15})`;
           } else {
             card.classList.remove('is-speaking');
             ripple1.classList.add('hidden');
@@ -1495,13 +1531,18 @@
     }
 
     /**
-     * 8. TACTILE CONTROL DOCK INTERACTIONS
+     * 8. HARDWARE CONTROL DOCK INTERACTIONS (SYNCED OVER P2P DATACHANNELS)
      */
     function toggleMic() {
       state.isMuted = !state.isMuted;
 
       if (localStream) {
         localStream.getAudioTracks().forEach((track) => {
+          track.enabled = !state.isMuted;
+        });
+      }
+      if (rawMicStream) {
+        rawMicStream.getAudioTracks().forEach((track) => {
           track.enabled = !state.isMuted;
         });
       }
@@ -1517,14 +1558,12 @@
       const micLabel = document.getElementById('micLabel');
 
       if (!state.isMuted) {
-        playTactileClick(620, 'toggleOn');
         micBtn.classList.remove('tactile-coral');
         micBtn.classList.add('tactile-emerald');
         micIconOff.classList.add('hidden');
         micIconOn.classList.remove('hidden');
         micLabel.textContent = 'Live';
       } else {
-        playTactileClick(380, 'toggleOff');
         micBtn.classList.remove('tactile-emerald');
         micBtn.classList.add('tactile-coral');
         micIconOn.classList.add('hidden');
@@ -1561,7 +1600,6 @@
       const label = document.getElementById('deafenLabel');
 
       if (state.isDeafened) {
-        playTactileClick(340, 'toggleOff');
         btn.classList.add('tactile-coral');
         iconOn.classList.add('hidden');
         iconOff.classList.remove('hidden');
@@ -1571,7 +1609,6 @@
         label.classList.replace('text-slate-400', 'text-white');
         showToast('Incoming room audio deafened');
       } else {
-        playTactileClick(540, 'toggleOn');
         btn.classList.remove('tactile-coral');
         iconOff.classList.add('hidden');
         iconOn.classList.remove('hidden');
@@ -1599,11 +1636,9 @@
       if (selfUser) selfUser.handRaised = state.handRaised;
 
       if (state.handRaised) {
-        playTactileClick(660, 'toggleOn');
         btn.classList.add('tactile-amber', 'text-white');
         showToast('You raised your hand ✋');
       } else {
-        playTactileClick(440, 'toggleOff');
         btn.classList.remove('tactile-amber', 'text-white');
       }
 
@@ -1634,7 +1669,6 @@
      * 9. FLOATING REACTIONS & GROUP CHAT
      */
     function toggleReactionsDrawer() {
-      playTactileClick(560, 'pop');
       state.reactionsOpen = !state.reactionsOpen;
       const drawer = document.getElementById('reactionsDrawer');
       const btn = document.getElementById('reactToggleBtn');
@@ -1654,7 +1688,6 @@
     }
 
     function sendLiveReaction(emoji) {
-      playTactileClick(680, 'pop');
       spawnFloatingEmoji(emoji);
       broadcastData({
         type: 'reaction',
@@ -1685,7 +1718,6 @@
     }
 
     function toggleSideDrawer() {
-      playTactileClick(520, 'pop');
       const drawer = document.getElementById('sideDrawer');
       const badge = document.getElementById('chatUnreadBadge');
 
@@ -1705,7 +1737,6 @@
       const text = input.value.trim();
       if (!text) return;
 
-      playTactileClick(600, 'pop');
       appendChatMessage('You', text, true);
       broadcastData({
         type: 'chat',
@@ -1743,13 +1774,11 @@
      * 10. INVITE LINK COPY, CALL TIMER & CLEAN DISCONNECT
      */
     function copyInviteLink() {
-      playTactileClick(640, 'toggleOn');
       const shareUrl = `${window.location.origin}${window.location.pathname}?room=${state.roomCode}`;
       copyTextToClipboard(shareUrl, `Invite link copied! Share Room ${state.roomCode} with friends.`);
     }
 
     function copyRoomCode() {
-      playTactileClick(600, 'pop');
       copyTextToClipboard(state.roomCode, `Room code ${state.roomCode} copied!`);
     }
 
@@ -1777,22 +1806,25 @@
       document.getElementById('callTimer').textContent = `${mins}:${secs}`;
     }, 1000);
 
-    function toggleUiSfx() {
-      state.uiSfxEnabled = !state.uiSfxEnabled;
-      document.getElementById('uiSfxIconOn').classList.toggle('hidden', !state.uiSfxEnabled);
-      document.getElementById('uiSfxIconOff').classList.toggle('hidden', state.uiSfxEnabled);
-      if (state.uiSfxEnabled) playTactileClick(600, 'toggleOn');
-      showToast(state.uiSfxEnabled ? 'Tactile button sounds ON' : 'Tactile button sounds OFF');
-    }
-
-    function leaveCall() {
-      playTactileClick(300, 'toggleOff');
-      state.inCall = false;
-
+    function cleanupStreams() {
+      stopNoiseGateLoop();
       if (localStream) {
         localStream.getTracks().forEach((t) => t.stop());
         localStream = null;
       }
+      if (rawMicStream) {
+        rawMicStream.getTracks().forEach((t) => t.stop());
+        rawMicStream = null;
+      }
+    }
+
+    function leaveCall() {
+      state.inCall = false;
+      state.isMuted = false;
+      state.isDeafened = false;
+      state.handRaised = false;
+
+      cleanupStreams();
 
       dataConnections.forEach((c) => c.close());
       mediaConnections.forEach((m) => m.close());
@@ -1811,9 +1843,24 @@
       document.getElementById('callScreen').classList.remove('flex');
       document.getElementById('lobbyScreen').classList.remove('hidden');
 
+      // Reset dock button visual states
+      const micBtn = document.getElementById('micBtn');
+      micBtn.classList.remove('tactile-coral');
+      micBtn.classList.add('tactile-emerald');
+      document.getElementById('micIconOff').classList.add('hidden');
+      document.getElementById('micIconOn').classList.remove('hidden');
+      document.getElementById('micLabel').textContent = 'Live';
+
+      document.getElementById('deafenBtn').classList.remove('tactile-coral');
+      document.getElementById('speakerIconOff').classList.add('hidden');
+      document.getElementById('speakerIconOn').classList.remove('hidden');
+      document.getElementById('deafenLabel').textContent = 'Audio';
+
+      document.getElementById('handBtn').classList.remove('tactile-amber', 'text-white');
+
       document.getElementById('createRoomBtn').disabled = false;
       document.getElementById('joinRoomBtn').disabled = false;
-      document.getElementById('createBtnText').textContent = 'Create Voice Room';
+      document.getElementById('createBtnText').textContent = 'Create New Voice Room';
       document.getElementById('joinBtnText').textContent = 'Join Room';
       document.getElementById('roomCodeInput').value = state.roomCode;
 
@@ -1821,6 +1868,7 @@
     }
 
     window.addEventListener('beforeunload', () => {
+      cleanupStreams();
       if (peerInstance) {
         peerInstance.destroy();
       }
